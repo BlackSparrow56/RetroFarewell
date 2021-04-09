@@ -4,7 +4,7 @@
     {
         New,
         Old,
-        Vintage,
-        Nostalgic
+        Nostalgic,
+        Vintage
     }
 }

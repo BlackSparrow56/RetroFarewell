@@ -1,18 +1,32 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Game.Databases;
+using Game.Interactions;
 
-public class DialogueStarter : MonoBehaviour
+namespace Game.Dialogues
 {
-    // Start is called before the first frame update
-    void Start()
+    [AddComponentMenu("Game/Dialogues/DialogueStarter")]
+    public class DialogueStarter : MonoBehaviour
     {
-        
-    }
+        [SerializeField] private int dialogueId;
+        [SerializeField] private Interactor interactor;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        [SerializeField] private DialoguesDatabase database;
+
+        private void StartDialogue()
+        {
+
+        }
+
+        private void OnEnable()
+        {
+            interactor.Interaction += StartDialogue;
+        }
+
+        private void OnDisable()
+        {
+            interactor.Interaction -= StartDialogue;
+        }
     }
 }

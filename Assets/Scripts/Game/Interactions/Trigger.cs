@@ -1,27 +1,71 @@
 ﻿using System;
+using System.Linq;
+using System.Collections.Generic;
 using UnityEngine;
+using Game.Interactions.Enums;
 
 namespace Game.Interactions
 {
-    public class Trigger : MonoBehaviour
+    [RequireComponent(typeof(Collider))]
+    [AddComponentMenu("Game/Interactions/Trigger")]
+    public class Trigger : Interactor
     {
-        public Action<Collider> onTriggerEnter = _ => { };
-        public Action<Collider> onTriggerExit = _ => { };
-        public Action<Collider> onTriggerStay = _ => { };
+        [SerializeField] private List<TriggerAction> triggerActions;
+        [SerializeField] private ETriggerInteraction interactionType;
 
-        private void OnTriggerEnter(Collider other)
+        public override Action Interaction
         {
-            onTriggerEnter.Invoke(other);
+            get
+            {
+                var action = GetActionByType(interactionType);
+                return action.action;
+            }
+
+            set
+            {
+                int index = triggerActions.IndexOf(GetActionByType(interactionType));
+                triggerActions[index].action = value;
+            }
         }
 
-        private void OnTriggerExit(Collider other)
+        private TriggerAction GetActionByType(ETriggerInteraction type)
         {
-            onTriggerExit.Invoke(other);
+            return triggerActions.FirstOrDefault(value => value.type == type);
         }
 
-        private void OnTriggerStay(Collider other)
+        private bool Condition(Collider2D other)
         {
-            onTriggerStay.Invoke(other);
+            var controller = other.GetComponent<InteractController>();
+            if (controller != null)
+            {
+                return controller.Name == "Player";
+            }
+
+            return false;
+        } 
+
+        private void OnTriggerEnter2D(Collider2D other)
+        {
+            if (Condition(other))
+            {
+                GetActionByType(ETriggerInteraction.OnTriggerEnter).action.Invoke();
+            }
+        }
+
+        private void OnTriggerExit2D(Collider2D other)
+        {
+            if (Condition(other))
+            {
+                GetActionByType(ETriggerInteraction.OnTriggerExit).action.Invoke();
+            }
+        }
+
+        private void OnTriggerStay2D(Collider2D other)
+        {
+            if (Condition(other))
+            {
+                GetActionByType(ETriggerInteraction.OnTriggerStay).action.Invoke();
+            }
         }
     }
 }

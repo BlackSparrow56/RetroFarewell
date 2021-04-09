@@ -39,7 +39,7 @@ namespace Game.Player
 
         private void MovementLogic()
         {
-            rb.velocity = (Direction * speed) * Time.deltaTime;
+            rb.position += (Direction.normalized * speed) * Time.deltaTime;
         }
 
         private void AnimationLogic()

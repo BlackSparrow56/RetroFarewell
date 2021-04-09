@@ -17,6 +17,8 @@ namespace Game.Items
         public string Name => name;
         public string Description => description;
 
+        public Sprite Icon => icon;
+
         public EItemRarity Rarity => rarity;
         public EItemType Type => type;
     }

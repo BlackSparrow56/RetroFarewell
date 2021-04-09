@@ -7,7 +7,9 @@ namespace Game.Items
     [AddComponentMenu("Game/Items/Inventory")]
     public class Inventory : MonoBehaviour
     {
-        [SerializeField] private List<Item> items;
+        [SerializeField] private List<PlayerItem> items;
+
+        public List<PlayerItem> Items => items;
 
         public void Add(ItemVo type, int count)
         {
@@ -18,8 +20,13 @@ namespace Game.Items
             }
             else
             {
-                items.Add(new Item(type, count));
+                items.Add(new PlayerItem(type, count));
             }
+        }
+
+        public void Add(Item item)
+        {
+            Add(item.type, item.count);
         }
 
         public bool TryRemove(ItemVo type, int count)
@@ -34,6 +41,11 @@ namespace Game.Items
             {
                 return false;
             }
+        }
+
+        public bool TryRemove(Item item)
+        {
+            return TryRemove(item.type, item.count);
         }
 
         private void Remove(ItemVo type, int count)
