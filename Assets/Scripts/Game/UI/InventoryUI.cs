@@ -10,6 +10,7 @@ using TMPro;
 
 namespace Game.UI
 {
+    [AddComponentMenu("Game/UI/InventoryUI")]
     public class InventoryUI : MonoBehaviour
     {
         [SerializeField] private GameObject panel;
@@ -60,7 +61,6 @@ namespace Game.UI
         {
             if (inventory.Items == null || inventory.Items.Count == 0)
             {
-                Debug.Log($"Inventory is empty");
                 return;
             }
             else

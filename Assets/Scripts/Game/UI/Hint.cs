@@ -4,6 +4,7 @@ using TMPro;
 
 namespace Game.UI
 {
+    [AddComponentMenu("Game/UI/Hint")]
     public class Hint : MonoBehaviour
     {
         [SerializeField] private TMP_Text text;

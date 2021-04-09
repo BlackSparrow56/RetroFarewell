@@ -2,17 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class StatsUI : MonoBehaviour
+namespace Game.UI
 {
-    // Start is called before the first frame update
-    void Start()
+    [AddComponentMenu("Game/UI/StatsUI")]
+    public class StatsUI : MonoBehaviour
     {
-        
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

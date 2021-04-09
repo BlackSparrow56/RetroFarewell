@@ -13,7 +13,11 @@ namespace Utils
     public class DestroyableAudioSource : MonoBehaviour
     {
         // Кривая Безье для нелинейного уменьшения (или увеличения) звука.
-        [SerializeField] private AnimationCurve volumeCurve;
+        public AnimationCurve VolumeCurve
+        {
+            get;
+            set;
+        }
 
         // Имя звука, задаваемое сервисом звуков, который и будет к нему обращаться, находя в списке.
         public string Name
@@ -101,12 +105,12 @@ namespace Utils
             source.Play();
 
             StopAllCoroutines();
-            StartCoroutine(Coroutines.Graduate(SetVolume, durationLeft, false, volumeCurve, Stop));
-        }
+            StartCoroutine(Coroutines.Graduate(SetVolume, durationLeft, false, VolumeCurve, Stop));
 
-        private void SetVolume(float progress)
-        {
-            source.volume = progress;
+            void SetVolume(float progress)
+            {
+                source.volume = progress;
+            }
         }
     }
 }
