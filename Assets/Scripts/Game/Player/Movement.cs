@@ -9,22 +9,28 @@ namespace Game.Player
     [AddComponentMenu("Game/Player/Movement")]
     public class Movement : MonoBehaviour
     {
+        [SerializeField] private float speed;
         [SerializeField] private List<DirectionInfo> directionsInfo;
 
         [SerializeField] private Rigidbody2D rb;
         [SerializeField] private Animator animator;
 
-        private List<Vector2> _buffer = new List<Vector2>();
+        private readonly List<Vector2> _buffer = new List<Vector2>();
+
+        private Vector2 Direction => _buffer.Sum();
 
         private void InputLogic()
         {
             foreach (var info in directionsInfo)
             {
-                if (Input.GetKeyDown(info.keyCode))
+                if (Input.GetKey(info.keyCode))
                 {
-                    _buffer.Add(info.direction);
+                    if (!_buffer.Contains(info.direction))
+                    {
+                        _buffer.Add(info.direction);
+                    }
                 }
-                else if (Input.GetKeyUp(info.keyCode))
+                else
                 {
                     _buffer.Remove(info.direction);
                 }
@@ -33,19 +39,22 @@ namespace Game.Player
 
         private void MovementLogic()
         {
-            rb.AddForce(_buffer.Sum());
+            rb.velocity = (Direction * speed) * Time.deltaTime;
         }
 
         private void AnimationLogic()
         {
-            var direction = _buffer.Sum();
-            animator.SetInteger("X", (int) direction.x);
-            animator.SetInteger("Y", (int) direction.y);
-
-            if (direction != Vector2.zero)
+            if (Direction != Vector2.zero)
             {
-                var animationName = $"Go{directionsInfo.FirstOrDefault(value => value.direction == direction).name}";
-                animator.Play(animationName);
+                var animationName = $"Go{directionsInfo.FirstOrDefault(value => value.direction == Direction).name}";
+                if (!animator.GetCurrentAnimatorStateInfo(0).IsName(animationName))
+                {
+                    animator.Play(animationName);
+                }
+            }
+            else
+            {
+                animator.SetTrigger("Idle");
             }
         }
 
