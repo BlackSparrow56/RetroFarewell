@@ -6,6 +6,8 @@ namespace Game.Items
     [CreateAssetMenu(fileName = "ItemVo", menuName = "Items/ItemVo")]
     public class ItemVo : ScriptableObject
     {
+        [SerializeField] private int id;
+
         [SerializeField] new private string name;
         [SerializeField] private string description;
 
@@ -13,6 +15,8 @@ namespace Game.Items
 
         [SerializeField] private EItemRarity rarity;
         [SerializeField] private EItemType type;
+
+        public int Id => id;
 
         public string Name => name;
         public string Description => description;

@@ -8,6 +8,6 @@ namespace Game.Quests
     {
         [SerializeField] private QuestBase activeQuest;
 
-        [SerializeField] private QuestDatabase questDatabase;
+        [SerializeField] private QuestsDatabase questDatabase;
     }
 }

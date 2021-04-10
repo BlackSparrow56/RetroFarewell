@@ -6,8 +6,8 @@ using Utils.Extensions;
 
 namespace Game.Player
 {
-    [AddComponentMenu("Game/Player/Movement")]
-    public class Movement : MonoBehaviour
+    [AddComponentMenu("Game/Player/PlayerMovement")]
+    public class PlayerMovement : MonoBehaviour
     {
         [SerializeField] private float speed;
         [SerializeField] private List<DirectionInfo> directionsInfo;
@@ -18,6 +18,12 @@ namespace Game.Player
         private readonly List<Vector2> _buffer = new List<Vector2>();
 
         private Vector2 Direction => _buffer.Sum();
+
+        public bool CanMove
+        {
+            get;
+            set;
+        } = true;
 
         private void InputLogic()
         {
@@ -60,9 +66,12 @@ namespace Game.Player
 
         private void Update()
         {
-            InputLogic();
-            MovementLogic();
-            AnimationLogic();
+            if (CanMove)
+            {
+                InputLogic();
+                MovementLogic();
+                AnimationLogic();
+            }
         }
     }
 }

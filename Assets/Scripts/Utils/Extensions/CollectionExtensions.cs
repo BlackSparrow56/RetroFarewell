@@ -29,10 +29,8 @@ namespace Utils.Extensions
             double sum = array.Sum(value => weight(value));
             double random = Random.Range(0f, (float) sum);
 
-            for (int i = 0; i < array.Length; i++)
+            foreach (var element in array)
             {
-                var element = array[i];
-
                 random -= weight(element);
                 if (random <= 0)
                 {
@@ -89,18 +87,26 @@ namespace Utils.Extensions
                 {
                     throw new Exception($"rightIndex of collection is outside the bounds of the array");
                 }
-
-                if (leftIndex == rightIndex)
-                {
-                    throw new Exception($"leftIndex is equals rightIndex");
-                }
             }
         }
-        
+
+        /// <summary>
+        /// Перемешивает элементы коллекции в случайном порядке.
+        /// </summary>
+        public static IEnumerable<T> Shake<T>(this IEnumerable<T> collection)
+        {
+            foreach (var element in collection)
+            {
+                collection = collection.Swap(element, collection.GetRandom());
+            }
+
+            return collection;
+        }
+
         /// <summary>
         /// Метод, созданный с целью сократить дублирование кода.
         /// </summary>
-        public static IEnumerable<T> Swap<T>(this IEnumerable<T> collection, int leftIndex, int rightIndex)
+        private static IEnumerable<T> Swap<T>(this IEnumerable<T> collection, int leftIndex, int rightIndex)
         {
             var array = collection.ToArray();
 

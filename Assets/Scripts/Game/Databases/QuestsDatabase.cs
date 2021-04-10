@@ -5,8 +5,8 @@ using Game.Quests;
 
 namespace Game.Databases
 {
-    [CreateAssetMenu(fileName = "QuestDatabase", menuName = "Databases/QuestDatabase")]
-    public class QuestDatabase : ScriptableObject
+    [CreateAssetMenu(fileName = "QuestsDatabase", menuName = "Databases/QuestsDatabase")]
+    public class QuestsDatabase : ScriptableObject
     {
         [SerializeField] private List<QuestBase> quests = new List<QuestBase>();
 

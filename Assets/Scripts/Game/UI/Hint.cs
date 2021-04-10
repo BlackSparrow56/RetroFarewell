@@ -11,6 +11,7 @@ namespace Game.UI
 
         public void Show(string text, float duration)
         {
+            float alpha = this.text.alpha;
             this.text.text = text;
 
             StopAllCoroutines();
@@ -18,7 +19,7 @@ namespace Game.UI
 
             void SetProgress(float progress)
             {
-                this.text.alpha = progress;
+                this.text.alpha = Mathf.Lerp(alpha, 1f, progress);
             }
         }
     }

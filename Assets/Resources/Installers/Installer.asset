@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c55ad2963663c349a5aff186b7ce8a6, type: 3}
+  m_Name: Installer
+  m_EditorClassIdentifier: 
+  databases:
+    attackAnswersDatabase: {fileID: 11400000, guid: b6b0a1930b833b2429d5d6e46246003d, type: 2}
+    dialoguesDatabase: {fileID: 11400000, guid: 807fa7da8684aff46b08b5a5f7b6bfe9, type: 2}
+    itemsDatabase: {fileID: 11400000, guid: d668135897a52b943aa8d6774eb0f435, type: 2}
+    linksDatabase: {fileID: 11400000, guid: f2a6d38592cfd2444a20882836cb75da, type: 2}
+    questsDatabase: {fileID: 11400000, guid: 92057ff378c8c5946a2b21db58534afd, type: 2}

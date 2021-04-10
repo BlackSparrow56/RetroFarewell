@@ -8,12 +8,11 @@ using Game.Items.Structs;
 using Utils.Extensions;
 using TMPro;
 
-namespace Game.UI
+namespace Game.UI.Panels
 {
-    [AddComponentMenu("Game/UI/InventoryUI")]
-    public class InventoryUI : MonoBehaviour
+    [AddComponentMenu("Game/UI/Panels/InventoryUI")]
+    public class InventoryUI : Panel
     {
-        [SerializeField] private GameObject panel;
         [SerializeField] private GameObject slotPrefab;
         [SerializeField] private Transform content;
 
@@ -27,37 +26,9 @@ namespace Game.UI
 
         private readonly List<Slot> _slots = new List<Slot>();
 
-        private bool _opened = false;
-        private bool Opened
-        {
-            get => _opened;
-            set
-            {
-                _opened = value;
-                panel.SetActive(_opened);
-                if (_opened)
-                {
-                    Show();
-                }
-                else
-                {
-                    Hide();
-                }
-            }
-        }
-
-        public void Toggle()
-        {
-            Opened = !Opened;
-        }
-
-        private Color GetColorByRarity(EItemRarity rarity)
-        {
-            return rarityColors.FirstOrDefault(value => value.rarity == rarity).color;
-        }
 
         [ContextMenu("Show")]
-        private void Show()
+        public void Show()
         {
             if (inventory.Items == null || inventory.Items.Count == 0)
             {
@@ -82,13 +53,19 @@ namespace Game.UI
             }
         }
 
-        private void Hide()
+        [ContextMenu("Hide")]
+        public void Hide()
         {
             var items = inventory.Items.Where(value => value.newItem).ToList();
             items.ForEach(value => value.newItem = false);
 
             _slots.ForEach(value => Destroy(value.gameObject));
             _slots.Clear();
+        }
+
+        private Color GetColorByRarity(EItemRarity rarity)
+        {
+            return rarityColors.FirstOrDefault(value => value.rarity == rarity).color;
         }
 
         private void Choose(Item item)
