@@ -1,7 +1,7 @@
 using System;
 using UnityEngine.Events;
 
-namespace Game.UI
+namespace Game.UI.Links
 {
     [Serializable]
     public class LinkEvent

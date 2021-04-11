@@ -1,13 +1,14 @@
 using System;
 using System.Collections.Generic;
-using UnityEngine;
 
-namespace Game.Lore
+namespace Game.Lore.Notes
 {
     [Serializable]
-    public class Note : MonoBehaviour
+    public class Note
     {
         public string content;
         public List<Note> nestedNotes;
+
+        public bool hidden;
     }
 }

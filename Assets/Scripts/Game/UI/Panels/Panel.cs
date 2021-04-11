@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.Events;
+using Game.Player;
 using Zenject;
 
 namespace Game.UI.Panels
@@ -13,15 +14,18 @@ namespace Game.UI.Panels
         [SerializeField] protected UnityEvent closed;
 
         [SerializeField] protected bool closeAllOther;
+        [SerializeField] protected bool banPlayerMove;
 
         protected bool _opened = false;
 
         protected UIController _UIController;
+        private PlayerController _playerController;
 
         [Inject]
-        private void Construct(UIController UIController)
+        private void Construct(UIController UIController, PlayerController playerController)
         {
             _UIController = UIController;
+            _playerController = playerController;
         }
 
         public virtual void Toggle(out bool opened)
@@ -52,6 +56,11 @@ namespace Game.UI.Panels
             {
                 _UIController.CloseBeside(this);
             }
+
+            if (banPlayerMove)
+            {
+                _playerController.Movement.CanMove = false;
+            }
         }
 
         public virtual void Close()
@@ -59,6 +68,11 @@ namespace Game.UI.Panels
             _opened = false;
             panel.SetActive(false);
             closed.Invoke();
+
+            if (banPlayerMove)
+            {
+                _playerController.Movement.CanMove = true;
+            }
         }
     }
 }

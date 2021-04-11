@@ -6,8 +6,11 @@ namespace Game.Player.Structs
     [Serializable]
     public struct DirectionInfo
     {
-        public Vector2 direction;
-        public KeyCode keyCode;
         public string name;
+
+        public Vector2 direction;
+        public float speedMultiplier;
+
+        public KeyCode keyCode;
     }
 }

@@ -6,11 +6,9 @@ namespace Game.Lore
     public class Person : ScriptableObject
     {
         [SerializeField] new private string name;
-
         [SerializeField] private Color nameColor; // Цвет имени в панели диалогов.
 
         public string Name => name;
-
         public Color NameColor => nameColor;
     }
 }

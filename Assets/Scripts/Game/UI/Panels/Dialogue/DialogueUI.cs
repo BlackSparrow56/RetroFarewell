@@ -1,26 +1,60 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Linq;
+using System.Collections.Generic;
 using UnityEngine;
-using Game.Dialogues.Structs;
+using Game.UI.Links;
+using Game.UI.Panels.Dialogues.Structs;
+using Game.Dialogues;
+using Game.Dialogues.Nodes;
+using Game.Databases;
+using Utils.Extensions;
 using TMPro;
 
-namespace Game.UI.Panels.Dialogue
+namespace Game.UI.Panels.Dialogues
 {
     [AddComponentMenu("Game/UI/Panels/Dialogue/DialogueUI")]
     public class DialogueUI : Panel
     {
-        [SerializeField] private GameObject replicaPrefab;
-        [SerializeField] private GameObject actionPrefab;
         [SerializeField] private GameObject answerPrefab;
+        [SerializeField] private GameObject eventPrefab;
+        [SerializeField] private GameObject replicaPrefab;
 
         [SerializeField] private Transform content;
 
-        private List<GameObject> _dialogue = new List<GameObject>();
-        private List<Answer> _answers = new List<Answer>();
+        [SerializeField] private ShimmeryHint hint;
 
-        public override void Toggle()
+        [SerializeField] private DialogueStyle style;
+
+        [SerializeField] private PersonsDatabase personsDatabase;
+
+        [SerializeField] private List<NumberKeyCodePair> numberKeyCodePairs;
+
+        public Action<Answer> onAnswerChoosen = _ => { };
+
+        private List<GameObject> _dialogue = new List<GameObject>();
+
+        private List<AnswerUI> _answers = new List<AnswerUI>();
+        private AnswerUI _currentAnswer;
+
+        private bool _choosing = false;
+
+        private LinkEventsContainer _linksContainer;
+
+        public override void Open()
         {
-            base.Toggle();
-            _UIController.CanOpenPanel = !_UIController.CanOpenPanel;
+            base.Open();
+            _UIController.CanOpenPanel = false;
+        }
+
+        public override void Close()
+        {
+            base.Close();
+            _UIController.CanOpenPanel = true;
+        }
+
+        public void Set(Dialogue dialogue)
+        {
+            _linksContainer = dialogue.LinksContainer;
         }
 
         public void Clear()
@@ -34,17 +68,100 @@ namespace Game.UI.Panels.Dialogue
             var replicaObject = Instantiate(replicaPrefab, content);
             var component = replicaObject.GetComponent<ReplicaUI>();
 
-            component.Set(replica.text);
+            component.SetText(replica.text);
+            component.SetName(replica.name, personsDatabase.GetPersonByName(replica.name).NameColor);
+            component.SetContainer(_linksContainer);
+
+            component.Set();
+
+            _dialogue.Add(replicaObject);
         }
 
-        public void Say(DialogueAction action)
+        public void Say(DialogueEvent action)
         {
+            var eventObject = Instantiate(eventPrefab, content);
+            var component = eventObject.GetComponent<EventUI>();
 
+            component.SetText($"{action.text.Colored(style.actionColor)}");
+            component.SetContainer(_linksContainer);
+            component.Set();
+
+            _dialogue.Add(eventObject);
         }
 
         public void Say(IEnumerable<Answer> answers)
         {
+            var list = answers.ToList();
 
+            for (int i = 0; i < list.Count; i++)
+            {
+                var answer = list[i];
+
+                var answerObject = Instantiate(answerPrefab, content);
+                var component = answerObject.GetComponent<AnswerUI>();
+
+                component.SetText(answer.text);
+                component.SetNumber(i + 1);
+                component.SetColor(style.passiveAnswerVariantColor);
+                component.SetAnswer(answer);
+                component.SetContainer(_linksContainer);
+
+                component.Set();
+
+                _dialogue.Add(answerObject);
+                _answers.Add(component);
+            }
+
+            _choosing = true;
+        }
+
+        public void SetWaiting(bool waiting)
+        {
+            hint.SetActive(waiting);
+        }
+
+        private void Update()
+        {
+            if (_choosing)
+            {
+                var tapped = numberKeyCodePairs.FirstOrDefault(value => Input.GetKeyDown(value.keyCode));
+                var answer = _answers.FirstOrDefault(value => value.Number == tapped.number);
+
+                if (answer != null)
+                {
+                    if (answer != _currentAnswer)
+                    {
+                        _currentAnswer?.Deselect();
+                    }
+
+                    answer.Select(style.activeAnswerVariantColor, style.underlineAnswerVariants, out bool twice);
+                    _currentAnswer = answer;
+
+                    if (twice)
+                    {
+                        _answers.Clear();
+                        _currentAnswer = null;
+                        _choosing = false;
+
+                        onAnswerChoosen.Invoke(answer.Answer);
+                    }
+                }
+
+                /*
+                for (int i = 0; i < _answers.Count; i++)
+                {
+                    if (Input.GetKeyDown(numberKeyCodePairs[i].keyCode))
+                    {
+                        _answers[i].Choose(style.activeAnswerVariantColor, style.underlineAnswerVariants, out bool twice);
+                        if (twice)
+                        {
+                            _answers.Clear();
+                            onAnswerChoosen.Invoke(_answers[i].Answer);
+                        }
+                    }
+                }
+                */
+            }
         }
     }
 }

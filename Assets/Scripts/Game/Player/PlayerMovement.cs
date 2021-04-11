@@ -45,7 +45,7 @@ namespace Game.Player
 
         private void MovementLogic()
         {
-            rb.position += (Direction.normalized * speed) * Time.deltaTime;
+            rb.position += (Direction * speed * directionsInfo.FirstOrDefault(value => value.direction == Direction).speedMultiplier) * Time.deltaTime;
         }
 
         private void AnimationLogic()

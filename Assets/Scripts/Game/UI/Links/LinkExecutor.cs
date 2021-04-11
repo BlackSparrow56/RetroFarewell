@@ -6,19 +6,17 @@ using Game.Databases;
 using TMPro;
 using Zenject;
 
-namespace Game.UI
+namespace Game.UI.Links
 {
     [AddComponentMenu("Game/UI/LinkExecutor")]
     public class LinkExecutor : MonoBehaviour, IPointerClickHandler
     {
         [SerializeField] private TMP_Text text;
 
-        private LinksContainer _linksContainer;
-
-        [Inject]
-        private void Construct(LinksContainer linksContainer)
+        public LinkEventsContainer LinksContainer
         {
-            _linksContainer = linksContainer;
+            get;
+            set;
         }
 
         public void OnPointerClick(PointerEventData eventData)
@@ -28,7 +26,7 @@ namespace Game.UI
             {
                 TMP_LinkInfo linkInfo = text.textInfo.linkInfo[linkIndex];
 
-                foreach (var action in _linksContainer.LinkEvents)
+                foreach (var action in LinksContainer.linkEvents)
                 {
                     if (linkInfo.GetLinkID() == action.id)
                     {

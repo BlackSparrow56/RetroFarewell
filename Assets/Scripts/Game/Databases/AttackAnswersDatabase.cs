@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using Game.Dialogues.Structs;
+using Game.Dialogues.Nodes;
 
 namespace Game.Databases
 {
