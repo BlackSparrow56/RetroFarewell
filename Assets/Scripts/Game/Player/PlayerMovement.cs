@@ -1,14 +1,19 @@
 ﻿using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
+using Game.Events;
+using Game.Events.Instructions.Enums;
 using Game.Player.Structs;
 using Utils.Extensions;
+using Zenject;
 
 namespace Game.Player
 {
     [AddComponentMenu("Game/Player/PlayerMovement")]
     public class PlayerMovement : MonoBehaviour
     {
+        [SerializeField] private Vector2 tileSize;
+
         [SerializeField] private float speed;
         [SerializeField] private List<DirectionInfo> directionsInfo;
 
@@ -17,7 +22,8 @@ namespace Game.Player
 
         private readonly List<Vector2> _buffer = new List<Vector2>();
 
-        private Vector2 Direction => _buffer.Sum();
+        private Vector2 Direction => directionsInfo.FirstOrDefault(value => value.direction == Normalize(_buffer.Sum())).direction;
+        private Vector2 RealDirection => (Direction.magnitude == 1) ? Direction * tileSize : Direction * tileSize / 2;
 
         public bool CanMove
         {
@@ -25,27 +31,37 @@ namespace Game.Player
             set;
         } = true;
 
-        private void InputLogic()
+        private Executor _executor;
+
+        [Inject]
+        private void Construct(Executor executor)
         {
-            foreach (var info in directionsInfo)
+            _executor = executor;
+        }
+
+        private Vector2 Normalize(Vector2 vector)
+        {
+            if (vector.x > 1)
             {
-                if (Input.GetKey(info.keyCode))
-                {
-                    if (!_buffer.Contains(info.direction))
-                    {
-                        _buffer.Add(info.direction);
-                    }
-                }
-                else
-                {
-                    _buffer.Remove(info.direction);
-                }
+                vector.x = 1;
             }
+
+            if (vector.y > 1)
+            {
+                vector.y = 1;
+            }
+
+            return vector;
         }
 
         private void MovementLogic()
         {
-            rb.position += (Direction * speed * directionsInfo.FirstOrDefault(value => value.direction == Direction).speedMultiplier) * Time.deltaTime;
+            var direction = RealDirection * speed * Time.deltaTime;
+
+            if (rb.Cast(direction, new ContactFilter2D() { layerMask = LayerMask.GetMask("Obstacles") }, new RaycastHit2D[0], direction.magnitude * Time.fixedDeltaTime) == 0)
+            {
+                transform.position += (Vector3) direction;
+            }
         }
 
         private void AnimationLogic()
@@ -66,11 +82,43 @@ namespace Game.Player
 
         private void Update()
         {
+            rb.velocity = Vector2.zero;
+
             if (CanMove)
             {
-                InputLogic();
-                MovementLogic();
                 AnimationLogic();
+                MovementLogic();
+            }
+        }
+
+        private void OnEnable()
+        {
+            foreach (var info in directionsInfo)
+            {
+                _executor.AddKeyInstruction(info.keyCode, EKeyState.Holded, HoldedAction);
+                _executor.AddKeyInstruction(info.keyCode, EKeyState.Untouched, UntouchedAction);
+
+                void HoldedAction()
+                {
+                    if (!_buffer.Contains(info.direction))
+                    {
+                        _buffer.Add(info.direction);
+                    }
+                }
+
+                void UntouchedAction()
+                {
+                    _buffer.Remove(info.direction);
+                }
+            }
+        }
+
+        private void OnDisable()
+        {
+            foreach (var info in directionsInfo)
+            {
+                _executor.RemoveKeyInstruction(info.keyCode, EKeyState.Holded);
+                _executor.RemoveKeyInstruction(info.keyCode, EKeyState.Untouched);
             }
         }
     }

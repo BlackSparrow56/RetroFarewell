@@ -1,6 +1,7 @@
 using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
+using Game.Events;
 using Game.Player;
 using Game.UI.Panels;
 using Zenject;
@@ -14,17 +15,19 @@ namespace Game.UI
 
         public List<BindPanel> Panels => panels;
 
-        private PlayerController _playerController;
-
         public bool CanOpenPanel
         {
             get;
             set;
-        }
+        } = true;
+
+        private Executor _executor;
+        private PlayerController _playerController;
 
         [Inject]
-        private void Construct(PlayerController playerController)
+        private void Construct(Executor executor, PlayerController playerController)
         {
+            _executor = executor;
             _playerController = playerController;
         }
 

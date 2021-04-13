@@ -104,6 +104,21 @@ namespace Utils.Extensions
         }
 
         /// <summary>
+        /// Возвращает count последних элементов коллекции.
+        /// </summary>
+        public static IEnumerable<T> Last<T>(this IEnumerable<T> collection, int count)
+        {
+            if (collection.Count() > count)
+            {
+                return collection.ToList().GetRange(collection.Count() - 1 - count, count).AsEnumerable();
+            }
+            else
+            {
+                return collection;
+            }
+        }
+
+        /// <summary>
         /// Метод, созданный с целью сократить дублирование кода.
         /// </summary>
         private static IEnumerable<T> Swap<T>(this IEnumerable<T> collection, int leftIndex, int rightIndex)

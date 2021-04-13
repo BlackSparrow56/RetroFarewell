@@ -7,9 +7,7 @@ namespace Game.Player.Structs
     public struct DirectionInfo
     {
         public string name;
-
         public Vector2 direction;
-        public float speedMultiplier;
 
         public KeyCode keyCode;
     }

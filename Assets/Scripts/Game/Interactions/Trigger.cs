@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Linq;
-using System.Collections.Generic;
 using UnityEngine;
-using Game.Interactions.Enums;
+using Game.Events;
+using Game.Events.Instructions.Enums;
+using Zenject;
 
 namespace Game.Interactions
 {
@@ -10,35 +10,32 @@ namespace Game.Interactions
     [AddComponentMenu("Game/Interactions/Trigger")]
     public class Trigger : Interactor
     {
-        [SerializeField] private List<TriggerAction> triggerActions;
-        [SerializeField] private ETriggerInteraction interactionType;
+        [SerializeField] private string targetName;
 
+        [SerializeField] private bool buttonPerform;
+        [SerializeField] private KeyCode keyCode;
+
+        private Action _interaction = () => { };
         public override Action Interaction
         {
-            get
-            {
-                var action = GetActionByType(interactionType);
-                return action.action;
-            }
-
-            set
-            {
-                int index = triggerActions.IndexOf(GetActionByType(interactionType));
-                triggerActions[index].action = value;
-            }
+            get => _interaction;
+            set => _interaction = value;
         }
 
-        private TriggerAction GetActionByType(ETriggerInteraction type)
+        private Executor _executor;
+
+        [Inject]
+        private void Construct(Executor executor)
         {
-            return triggerActions.FirstOrDefault(value => value.type == type);
+            _executor = executor;
         }
-
+        
         private bool Condition(Collider2D other)
         {
             var controller = other.GetComponent<InteractController>();
             if (controller != null)
             {
-                return controller.Name == "Player";
+                return controller.Name == targetName;
             }
 
             return false;
@@ -48,7 +45,14 @@ namespace Game.Interactions
         {
             if (Condition(other))
             {
-                GetActionByType(ETriggerInteraction.OnTriggerEnter).action.Invoke();
+                if (buttonPerform)
+                {
+                    _executor.AddKeyInstruction(keyCode, EKeyState.Pushed, _interaction.Invoke, true);
+                }
+                else
+                {
+                    _interaction.Invoke();
+                }
             }
         }
 
@@ -56,15 +60,10 @@ namespace Game.Interactions
         {
             if (Condition(other))
             {
-                GetActionByType(ETriggerInteraction.OnTriggerExit).action.Invoke();
-            }
-        }
-
-        private void OnTriggerStay2D(Collider2D other)
-        {
-            if (Condition(other))
-            {
-                GetActionByType(ETriggerInteraction.OnTriggerStay).action.Invoke();
+                if (buttonPerform)
+                {
+                    _executor.RemoveKeyInstruction(keyCode, EKeyState.Pushed);
+                }
             }
         }
     }
