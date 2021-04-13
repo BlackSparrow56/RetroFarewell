@@ -32,8 +32,8 @@ namespace Game.UI.Panels.Dialogues
         public Action<Answer> onAnswerChoosen = _ => { };
 
         private List<GameObject> _dialogue = new List<GameObject>();
-
         private List<AnswerUI> _answers = new List<AnswerUI>();
+
         private AnswerUI _currentAnswer;
 
         private bool _choosing = false;

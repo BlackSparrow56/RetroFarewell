@@ -104,6 +104,8 @@ MonoBehaviour:
         exit: 0
         name: "\u041A\u043E\u0435-\u043A\u0442\u043E"
         answerNodes: 0600000007000000
+      attackReplicas: []
+      attackAnswers: []
     linksContainer:
       linkEvents:
       - id: 
@@ -123,5 +125,7 @@ MonoBehaviour:
       answers: []
       actions: []
       replicas: []
+      attackReplicas: []
+      attackAnswers: []
     linksContainer:
       linkEvents: []

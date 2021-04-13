@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Game.UI.Enums;
 using TMPro;
 
 namespace Game.UI
@@ -9,11 +10,13 @@ namespace Game.UI
     public class ShimmeryHint : MonoBehaviour
     {
         [SerializeField] private float frequency;
+        [SerializeField] private EShimmeryType type;
 
-        [SerializeField] private bool abs;
         [SerializeField] private bool isActive;
 
         [SerializeField] private TMP_Text text;
+
+        private float _startTime;
 
         public void SetActive(bool active)
         {
@@ -21,6 +24,10 @@ namespace Game.UI
             if (!active)
             {
                 text.alpha = 0f;
+            }
+            else
+            {
+                _startTime = Time.time;
             }
         }
 
@@ -38,8 +45,20 @@ namespace Game.UI
         {
             if (isActive)
             {
-                float alpha = Mathf.Sin(Time.time * frequency);
-                text.alpha = abs ? Mathf.Abs(alpha) : alpha;
+                float sin = Mathf.Sin((Time.time - _startTime) * frequency);
+
+                float alpha = sin;
+                switch(type)
+                {
+                    case EShimmeryType.Clamped:
+                        alpha = (sin + 1) / 2;
+                        break;
+                    case EShimmeryType.Absolute:
+                        alpha = Mathf.Abs(sin);
+                        break;
+                }
+
+                text.alpha = alpha;
             }
         }
     }

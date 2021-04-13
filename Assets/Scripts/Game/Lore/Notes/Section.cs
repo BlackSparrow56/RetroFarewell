@@ -1,14 +1,13 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace Game.Lore.Notes
 {
     [Serializable]
-    public class Note
+    public class Section
     {
         public string name;
-        public List<Paragraph> paragraphs;
-
-        public bool hidden;
+        public List<Note> notes;
     }
 }

@@ -2,7 +2,6 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
-using Game.Lore.Notes;
 using Game.Events.Instructions;
 using Game.Events.Instructions.Enums;
 
@@ -11,14 +10,24 @@ namespace Game.Events
     [AddComponentMenu("Game/Events/Executor")]
     public class Executor : MonoBehaviour
     {
-        [SerializeField] private Glossary glossary;
-
+        // ѕоследн€€ инструкци€ каждой очереди провер€ютс€ каждый кадр.  огда она выполн€етс€, переходит к следующей.
+        private readonly List<InstructionsQueue> _instructionsQueues = new List<InstructionsQueue>();
+        // Ёти инструкции провер€ютс€ каждый кадр.
         private readonly List<InstructionBase> _everyFrameInstructions = new List<InstructionBase>();
-        public List<InstructionBase> EveryFrameInstructions => _everyFrameInstructions;
 
         public void Execute(string text)
         {
             Debug.Log($"Execute: {text}");
+        }
+
+        public void AddQueue(InstructionsQueue queue)
+        { 
+            _instructionsQueues.Add(queue);
+        }
+
+        public void RemoveQueue(InstructionsQueue queue)
+        {
+            _instructionsQueues.Remove(queue);
         }
 
         public bool TryExecuteInstruction(InstructionBase instruction)
@@ -101,15 +110,24 @@ namespace Game.Events
 
         private void Update()
         {
-            var incoming = new List<InstructionBase>(_everyFrameInstructions);
-
-            foreach (var instruction in incoming)
+            var incomingEveryFrame = new List<InstructionBase>(_everyFrameInstructions);
+            foreach (var instruction in incomingEveryFrame)
             {
                 bool executed = instruction.TryExecute();
 
                 if (executed && instruction.SelfDestroy)
                 {
                     _everyFrameInstructions.Remove(instruction);
+                }
+            }
+
+            var incomingQueues = new List<InstructionsQueue>(_instructionsQueues);
+            foreach (var queue in incomingQueues)
+            {
+                queue.TryExecuteLast(out bool last);
+                if (last)
+                {
+                    _instructionsQueues.Remove(queue);
                 }
             }
         }

@@ -11,15 +11,33 @@ namespace Game.UI
 
         public void Show(string text, float duration)
         {
-            float alpha = this.text.alpha;
             this.text.text = text;
+            Show(duration);
+        }
+
+        public void Show(float duration)
+        {
+            float alpha = text.alpha;
 
             StopAllCoroutines();
             StartCoroutine(Coroutines.Graduate(SetProgress, duration));
 
             void SetProgress(float progress)
             {
-                this.text.alpha = Mathf.Lerp(alpha, 1f, progress);
+                text.alpha = Mathf.Lerp(alpha, 1f, progress);
+            }
+        }
+
+        public void Hide(float duration)
+        {
+            float alpha = text.alpha;
+
+            StopAllCoroutines();
+            StartCoroutine(Coroutines.Graduate(SetProgress, duration));
+
+            void SetProgress(float progress)
+            {
+                text.alpha = Mathf.Lerp(alpha, 0f, progress);
             }
         }
     }

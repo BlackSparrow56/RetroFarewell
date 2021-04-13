@@ -5,6 +5,8 @@ namespace Game.Lore.Notes
 {
     public class Glossary : MonoBehaviour
     {
-        [SerializeField] private List<Note> notes;
+        [SerializeField] private List<Section> sections;
+
+        public List<Section> Sections => sections;
     }
 }

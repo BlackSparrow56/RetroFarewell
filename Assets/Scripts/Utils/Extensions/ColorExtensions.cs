@@ -22,5 +22,13 @@ namespace Utils.Extensions
                 return (int) (from * 255);
             }
         }
+
+        /// <summary>
+        /// ¬озвращает тот же цвет с указанным в аргументе значением прозрачности.
+        /// </summary>
+        public static Color SetAlpha(this Color color, float alpha)
+        {
+            return new Color(color.r, color.g, color.b, alpha);
+        }
     }
 }
