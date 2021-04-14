@@ -4,8 +4,10 @@ namespace Game.Events.Instructions
 {
     public abstract class InstructionBase
     {
-        protected Action _action = () => { };
-        public Action Action => _action;
+        protected virtual Action Action
+        {
+            get;
+        }
 
         protected abstract Func<bool> Condition
         {
@@ -19,7 +21,7 @@ namespace Game.Events.Instructions
 
         public InstructionBase(Action action)
         {
-            _action = action;
+            Action = action;
         }
 
         public InstructionBase(Action action, bool selfDestroy) : this(action)
@@ -31,7 +33,7 @@ namespace Game.Events.Instructions
         {
             if (Condition.Invoke())
             {
-                _action.Invoke();
+                Action.Invoke();
                 return true;
             }
 

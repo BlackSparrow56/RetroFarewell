@@ -10,6 +10,8 @@ namespace Game.Events
     [AddComponentMenu("Game/Events/Executor")]
     public class Executor : MonoBehaviour
     {
+        [SerializeField] private List<StringInstruction> stringInstructions;
+
         // ѕоследн€€ инструкци€ каждой очереди провер€ютс€ каждый кадр.  огда она выполн€етс€, переходит к следующей.
         private readonly List<InstructionsQueue> _instructionsQueues = new List<InstructionsQueue>();
         // Ёти инструкции провер€ютс€ каждый кадр.
@@ -18,6 +20,9 @@ namespace Game.Events
         public void Execute(string text)
         {
             Debug.Log($"Execute: {text}");
+
+            var instruction = stringInstructions.FirstOrDefault(value => value.Name == text);
+            instruction.TryExecute();
         }
 
         public void AddQueue(InstructionsQueue queue)
@@ -59,22 +64,6 @@ namespace Game.Events
             _everyFrameInstructions.Add(instruction);
 
             return instruction;
-        }
-
-        public void RemoveKeyInstruction(KeyCode keyCode, EKeyState state, Action action)
-        {
-            _everyFrameInstructions.Remove(_everyFrameInstructions.FirstOrDefault(Condition));
-
-            bool Condition(InstructionBase instruction)
-            {
-                if (instruction.GetType() == typeof(KeyInstruction))
-                {
-                    var target = (KeyInstruction) instruction;
-                    return target.KeyCode == keyCode && target.TargetState == state && target.Action == action;
-                }
-
-                return false;
-            }
         }
 
         public void RemoveKeyInstruction(KeyCode keyCode, EKeyState state)

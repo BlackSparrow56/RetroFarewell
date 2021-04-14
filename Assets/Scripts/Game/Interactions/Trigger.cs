@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.Events;
 using Game.Events;
 using Game.Events.Instructions.Enums;
 using Zenject;
@@ -14,6 +15,9 @@ namespace Game.Interactions
 
         [SerializeField] private bool buttonPerform;
         [SerializeField] private KeyCode keyCode;
+
+        [SerializeField] private UnityEvent onTriggerEnter;
+        [SerializeField] private UnityEvent onTriggerExit;
 
         private Action _interaction = () => { };
         public override Action Interaction
@@ -53,6 +57,8 @@ namespace Game.Interactions
                 {
                     _interaction.Invoke();
                 }
+
+                onTriggerEnter.Invoke();
             }
         }
 
@@ -64,6 +70,8 @@ namespace Game.Interactions
                 {
                     _executor.RemoveKeyInstruction(keyCode, EKeyState.Pushed);
                 }
+
+                onTriggerExit.Invoke();
             }
         }
     }

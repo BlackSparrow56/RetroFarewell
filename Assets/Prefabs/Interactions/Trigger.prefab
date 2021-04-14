@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3106617003558551415}
   - component: {fileID: 3106617003558551414}
+  - component: {fileID: 4451908385845873981}
   - component: {fileID: 3106617003558551408}
   - component: {fileID: 3106617003558551413}
   - component: {fileID: 3106617003558551409}
@@ -46,11 +47,55 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27f2d76f36aa24640b70a1428a33357a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  triggerActions:
-  - type: 0
-  - type: 1
-  - type: 2
-  interactionType: 0
+  targetName: 
+  buttonPerform: 0
+  keyCode: 0
+  onTriggerEnter:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4451908385845873981}
+        m_TargetAssemblyTypeName: TriggerColor, Assembly-CSharp
+        m_MethodName: Enter
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onTriggerExit:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4451908385845873981}
+        m_TargetAssemblyTypeName: TriggerColor, Assembly-CSharp
+        m_MethodName: Exit
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &4451908385845873981
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3106617003558551412}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b3bec1c5fb35dd445b7799962602d051, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  duration: 1
+  activeColor: {r: 0.5568628, g: 0.83921576, b: 0.70980394, a: 1}
+  passiveColor: {r: 1, g: 0.78431374, b: 0.70980394, a: 1}
+  triggerRenderer: {fileID: 3106617003558551408}
 --- !u!212 &3106617003558551408
 SpriteRenderer:
   m_ObjectHideFlags: 0

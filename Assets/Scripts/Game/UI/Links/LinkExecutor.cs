@@ -13,6 +13,8 @@ namespace Game.UI.Links
     {
         [SerializeField] private TMP_Text text;
 
+        [SerializeField] private LinkEventsContainer container;
+
         public LinkEventsContainer LinksContainer
         {
             get;
@@ -21,6 +23,11 @@ namespace Game.UI.Links
 
         public void OnPointerClick(PointerEventData eventData)
         {
+            if (LinksContainer == null)
+            {
+                LinksContainer = container;
+            }
+
             int linkIndex = TMP_TextUtilities.FindIntersectingLink(text, eventData.position, null);
             if (linkIndex != -1)
             {

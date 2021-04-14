@@ -16,7 +16,7 @@ namespace Game.Lore.Notes
 
         public override string ToString()
         {
-            return $"<color={headingColor.ToHexadecimal()}>{heading}</color>\n{content}";
+            return $"<b><color={headingColor.ToHexadecimal()}>{heading}</color></b>\n{content}";
         }
     }
 }

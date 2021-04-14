@@ -1,0 +1,44 @@
+using UnityEngine;
+
+namespace Utils.Extensions
+{
+    public static class RectExtensions
+    {
+        public static bool ContainsEntirely(this Rect big, Rect small)
+        {
+            bool leftDownCorner = big.Contains(new Vector2(small.xMin, small.yMin));
+            bool leftUpCorner = big.Contains(new Vector2(small.xMin, small.yMax));
+            bool rightDownCorner = big.Contains(new Vector2(small.xMax, small.yMin));
+            bool rightUpCorner = big.Contains(new Vector2(small.xMax, small.yMax));
+
+            return leftDownCorner && leftUpCorner && rightDownCorner && rightUpCorner;
+        }
+
+        public static Vector2 ClampedInRectCenter(this Rect inside, Rect outside)
+        {
+            float clampedX = Mathf.Clamp(inside.center.x, outside.xMin + inside.size.x / 2, outside.xMax - inside.size.x / 2);
+            float clampedY = Mathf.Clamp(inside.center.y, outside.yMin + inside.size.y / 2, outside.yMax - inside.size.y / 2);
+
+            return new Vector2(clampedX, clampedY);
+        }
+
+        /*
+        public static Vector2 CuttedInRectCenter(this Rect inside, Rect outside)
+        {
+            var delta = outside.center - inside.center;
+            return default;
+        }
+        */
+
+        public static Vector2[] GetCorners(this Rect rect)
+        {
+            return new Vector2[]
+            {
+                new Vector2(rect.xMin, rect.yMin),
+                new Vector2(rect.xMin, rect.yMax),
+                new Vector2(rect.xMax, rect.yMax),
+                new Vector2(rect.xMax, rect.yMin)
+            };
+        }
+    }
+}

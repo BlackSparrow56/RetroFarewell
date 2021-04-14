@@ -58,7 +58,7 @@ namespace Game.Player
         {
             var direction = RealDirection * speed * Time.deltaTime;
 
-            if (rb.Cast(direction, new ContactFilter2D() { layerMask = LayerMask.GetMask("Obstacles") }, new RaycastHit2D[0], direction.magnitude * Time.fixedDeltaTime) == 0)
+            if (rb.Cast(direction, new ContactFilter2D() { layerMask = LayerMask.GetMask("Obstacles") }, new RaycastHit2D[1], direction.magnitude) == 0)
             {
                 transform.position += (Vector3) direction;
             }
@@ -82,12 +82,14 @@ namespace Game.Player
 
         private void Update()
         {
-            rb.velocity = Vector2.zero;
-
             if (CanMove)
             {
                 AnimationLogic();
                 MovementLogic();
+            }
+            else
+            {
+                animator.SetTrigger("Idle");
             }
         }
 

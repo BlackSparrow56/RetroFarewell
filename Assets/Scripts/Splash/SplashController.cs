@@ -46,7 +46,7 @@ namespace Splash
 
             static void OpenMenu()
             {
-                SceneManager.LoadScene("Menu");
+                SceneManager.LoadScene("Game");
             }
         }
 
