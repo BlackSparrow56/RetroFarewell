@@ -18,5 +18,16 @@ namespace Utils
 
             return list.AsEnumerable();
         }
+
+        public static IEnumerable<T> Append<T>(params IEnumerable<T>[] collections)
+        {
+            var list = new List<IEnumerable<T>>();
+            foreach (var collection in collections)
+            {
+                list.Add(collection);
+            }
+
+            return list.SelectMany(value => value).AsEnumerable();
+        }
     }
 }

@@ -54,24 +54,34 @@ namespace Game.Player
             return vector;
         }
 
-        private void MovementLogic()
+        private void MovementLogic(out bool rested)
         {
             var direction = RealDirection * speed * Time.deltaTime;
 
-            if (rb.Cast(direction, new ContactFilter2D() { layerMask = LayerMask.GetMask("Obstacles") }, new RaycastHit2D[1], direction.magnitude) == 0)
+            var cast = rb.Cast(direction, new ContactFilter2D() { layerMask = LayerMask.GetMask("Obstacles") }, new RaycastHit2D[1], direction.magnitude) == 0;
+            if (cast)
             {
                 transform.position += (Vector3) direction;
             }
+
+            rested = !cast;
         }
 
-        private void AnimationLogic()
+        private void AnimationLogic(bool rested)
         {
-            if (Direction != Vector2.zero)
+            if (!rested)
             {
-                var animationName = $"Go{directionsInfo.FirstOrDefault(value => value.direction == Direction).name}";
-                if (!animator.GetCurrentAnimatorStateInfo(0).IsName(animationName))
+                if (Direction != Vector2.zero)
                 {
-                    animator.Play(animationName);
+                    var animationName = $"Go{directionsInfo.FirstOrDefault(value => value.direction == Direction).name}";
+                    if (!animator.GetCurrentAnimatorStateInfo(0).IsName(animationName))
+                    {
+                        animator.Play(animationName);
+                    }
+                }
+                else
+                {
+                    animator.SetTrigger("Idle");
                 }
             }
             else
@@ -84,8 +94,8 @@ namespace Game.Player
         {
             if (CanMove)
             {
-                AnimationLogic();
-                MovementLogic();
+                MovementLogic(out bool rested);
+                AnimationLogic(rested);
             }
             else
             {

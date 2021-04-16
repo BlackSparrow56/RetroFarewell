@@ -14,15 +14,18 @@ namespace Game.Interactions
         [SerializeField] private string targetName;
 
         [SerializeField] private bool buttonPerform;
+        [SerializeField] private bool actionSelfDestroy;
+
         [SerializeField] private KeyCode keyCode;
 
         [SerializeField] private UnityEvent onTriggerEnter;
         [SerializeField] private UnityEvent onTriggerExit;
+        [SerializeField] private UnityEvent onInteractionPerformed;
 
         private Action _interaction = () => { };
         public override Action Interaction
         {
-            get => _interaction;
+            get => _interaction + onInteractionPerformed.Invoke;
             set => _interaction = value;
         }
 
@@ -51,11 +54,11 @@ namespace Game.Interactions
             {
                 if (buttonPerform)
                 {
-                    _executor.AddKeyInstruction(keyCode, EKeyState.Pushed, _interaction.Invoke, true);
+                    _executor.AddKeyInstruction(keyCode, EKeyState.Pushed, Interaction.Invoke, actionSelfDestroy);
                 }
                 else
                 {
-                    _interaction.Invoke();
+                    Interaction.Invoke();
                 }
 
                 onTriggerEnter.Invoke();

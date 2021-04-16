@@ -1,6 +1,7 @@
 using UnityEngine;
 using Game.Interactions;
 using Utils;
+using Utils.Extensions;
 
 namespace Game.Map
 {
@@ -17,7 +18,7 @@ namespace Game.Map
             if (collision.transform.position.y > transform.position.y)
             {
                 var controller = collision.gameObject.GetComponent<InteractController>();
-                if (controller != null && controller.Name == "Player")
+                if (controller != null && controller.Name == "PlayerRenderer")
                 {
                     Disappear();
                 }
@@ -29,7 +30,7 @@ namespace Game.Map
             if (collision.transform.position.y > transform.position.y)
             {
                 var controller = collision.gameObject.GetComponent<InteractController>();
-                if (controller != null && controller.Name == "Player")
+                if (controller != null && controller.Name == "PlayerRenderer")
                 {
                     Appear();
                 }
@@ -38,22 +39,34 @@ namespace Game.Map
 
         private void Appear()
         {
+            float tempAlpha = spriteRenderer.color.a;
+
             StopAllCoroutines();
-            StartCoroutine(Coroutines.Graduate(SetAlpha, 1f));
+            StartCoroutine(Coroutines.Graduate(SetProgress, 1f));
+
+            void SetProgress(float progress)
+            {
+                var color = spriteRenderer.color;
+                float alpha = Mathf.Lerp(disappearedAlpha, appearedAlpha, progress);
+
+                spriteRenderer.color = spriteRenderer.color.SetAlpha(Mathf.Lerp(tempAlpha, appearedAlpha, progress));
+            }
         }
 
         private void Disappear()
         {
+            float tempAlpha = spriteRenderer.color.a;
+
             StopAllCoroutines();
-            StartCoroutine(Coroutines.Graduate(SetAlpha, 1f, true));
-        }
+            StartCoroutine(Coroutines.Graduate(SetProgress, 1f));
 
-        private void SetAlpha(float progress)
-        {
-            var color = spriteRenderer.color;
-            float alpha = Mathf.Lerp(disappearedAlpha, appearedAlpha, progress);
+            void SetProgress(float progress)
+            {
+                var color = spriteRenderer.color;
+                float alpha = Mathf.Lerp(disappearedAlpha, appearedAlpha, progress);
 
-            spriteRenderer.color = new Color(color.r, color.g, color.b, alpha);
+                spriteRenderer.color = spriteRenderer.color.SetAlpha(Mathf.Lerp(tempAlpha, disappearedAlpha, progress));
+            }
         }
     }
 }
