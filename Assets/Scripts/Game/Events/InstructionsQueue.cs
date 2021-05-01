@@ -1,6 +1,7 @@
 using System.Linq;
 using System.Collections.Generic;
 using Game.Events.Instructions;
+using UnityEngine;
 
 namespace Game.Events
 {
@@ -10,7 +11,7 @@ namespace Game.Events
 
         public InstructionsQueue(params InstructionBase[] instructions) : this(instructions.AsEnumerable()) 
         { 
-
+           
         }
 
         public InstructionsQueue(IEnumerable<InstructionBase> instructions)

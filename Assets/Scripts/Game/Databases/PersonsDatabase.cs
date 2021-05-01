@@ -12,7 +12,7 @@ namespace Game.Databases
 
         public Person GetPersonByName(string name)
         {
-            return persons.FirstOrDefault(value => value.Name == name);
+            return persons.FirstOrDefault(value => value.name == name);
         }
     }
 }

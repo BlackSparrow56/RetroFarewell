@@ -71,7 +71,7 @@ namespace Game.UI.Panels
         private void Choose(Item item)
         {
             bigIcon.sprite = item.type.Icon;
-            nameText.text = $"<b><color={GetColorByRarity(item.type.Rarity).ToHexadecimal()}>{item.type.Name}</color></b> - {item.count}";
+            nameText.text = $"<b><color={GetColorByRarity(item.type.Rarity).ToHexadecimal()}>{item.type.Name}</color></b> {(item.count != 1 ? $"- {item.count}" : "")}";
             descriptionText.text = item.type.Description;
         }
     }

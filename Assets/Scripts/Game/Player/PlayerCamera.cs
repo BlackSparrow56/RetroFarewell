@@ -18,12 +18,25 @@ namespace Game.Player
         [SerializeField] private Transform player;
         [SerializeField] new private Camera camera;
 
-        private LocationsManager _locationsManager;
+        private LocationManager _locationsManager;
 
         [Inject]
-        private void Construct(LocationsManager locationsManager)
+        private void Construct(LocationManager locationsManager)
         {
             _locationsManager = locationsManager;
+        }
+
+        public void MoveInstantly()
+        {
+            var delta = player.position - transform.position;
+            delta.z = 0;
+
+            transform.position += delta;
+        }
+
+        public void SetSize(float size)
+        {
+            defaultSize = size;
         }
 
         private void Move()

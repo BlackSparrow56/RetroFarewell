@@ -1,6 +1,7 @@
 using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
+using Game.Markers;
 using Game.Events;
 using Game.Player;
 using Game.UI.Panels;
@@ -11,6 +12,8 @@ namespace Game.UI
     [AddComponentMenu("Game/UI/UIController")]
     public class UIController : MonoBehaviour
     {
+        [SerializeField] private MarkerManager markerManager;
+
         [SerializeField] private List<BindPanel> panels;
 
         public List<BindPanel> Panels => panels;
@@ -34,6 +37,16 @@ namespace Game.UI
         public Panel GetPanelByName(string name)
         {
             return panels.FirstOrDefault(value => value.name == name).panel;
+        }
+
+        public void ShowMarkers()
+        {
+            markerManager.SetMarkersActive(true);
+        }
+
+        public void HideMarkers()
+        {
+            markerManager.SetMarkersActive(false);
         }
 
         public void CloseBeside(Panel beside)

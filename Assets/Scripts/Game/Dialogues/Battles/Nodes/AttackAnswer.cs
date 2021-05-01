@@ -6,8 +6,8 @@ using Game.Dialogues.Nodes;
 namespace Game.Dialogues.Battles.Nodes
 {
     [Serializable]
-    public class AttackAnswer : Node
+    public class AttackAnswer : Answer
     {
-
+        public bool correct;
     }
 }

@@ -15,7 +15,10 @@ namespace Splash
     public class SplashController : MonoBehaviour
     {
         [SerializeField] private Image splashImage;
+        [SerializeField] private AudioSource source;
         [SerializeField] private ShimmeryHint hint;
+
+        [SerializeField] private AudioClip splashSound;
 
         [SerializeField] private SplashSettings settings;
 
@@ -39,6 +42,8 @@ namespace Splash
 
         private void AppearHint()
         {
+            source.PlayOneShot(splashSound);
+
             hint.SetText($"Нажмите {$"<b><color={settings.keyCodeColor.ToHexadecimal()}>{settings.keyCode}</color></b>"}, чтобы перейти в меню.");
             hint.SetActive(true);
 
@@ -46,7 +51,7 @@ namespace Splash
 
             static void OpenMenu()
             {
-                SceneManager.LoadScene("Game");
+                SceneManager.LoadScene("Menu");
             }
         }
 

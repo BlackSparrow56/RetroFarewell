@@ -38,6 +38,16 @@ namespace Game.UI.Links
                     if (linkInfo.GetLinkID() == action.id)
                     {
                         action.unityEvent.Invoke();
+                        return;
+                    }
+                }
+
+                foreach (var action in LinksContainer.links)
+                {
+                    if (linkInfo.GetLinkID() == action.key)
+                    {
+                        Application.OpenURL(action.value);
+                        return;
                     }
                 }
             }

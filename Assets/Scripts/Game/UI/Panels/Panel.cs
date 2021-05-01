@@ -1,3 +1,5 @@
+using System.Linq;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using Game.Player;
@@ -31,7 +33,7 @@ namespace Game.UI.Panels
         public virtual void Toggle(out bool opened)
         {
             opened = !_opened;
-            Toggle();
+            Toggle();   
         }
 
         public virtual void Toggle()
@@ -61,6 +63,8 @@ namespace Game.UI.Panels
             {
                 _playerController.Movement.CanMove = false;
             }
+
+            _UIController.HideMarkers();
         }
 
         public virtual void Close()
@@ -73,6 +77,8 @@ namespace Game.UI.Panels
             {
                 _playerController.Movement.CanMove = true;
             }
+
+            _UIController.ShowMarkers();
         }
     }
 }

@@ -19,16 +19,18 @@ namespace Utils.Extensions
             float clampedX = Mathf.Clamp(inside.center.x, outside.xMin + inside.size.x / 2, outside.xMax - inside.size.x / 2);
             float clampedY = Mathf.Clamp(inside.center.y, outside.yMin + inside.size.y / 2, outside.yMax - inside.size.y / 2);
 
+            if (inside.size.x > outside.size.x)
+            {
+                clampedX = outside.center.x;
+            }
+
+            if (inside.size.y > outside.size.y)
+            {
+                clampedY = outside.center.y;
+            }
+
             return new Vector2(clampedX, clampedY);
         }
-
-        /*
-        public static Vector2 CuttedInRectCenter(this Rect inside, Rect outside)
-        {
-            var delta = outside.center - inside.center;
-            return default;
-        }
-        */
 
         public static Vector2[] GetCorners(this Rect rect)
         {

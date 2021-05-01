@@ -1,14 +1,13 @@
+using System;
 using UnityEngine;
 
 namespace Game.Lore
 {
-    [CreateAssetMenu(menuName = "Lore/Person", fileName = "Person")]
-    public class Person : ScriptableObject
+    [Serializable]
+    public class Person
     {
-        [SerializeField] new private string name;
-        [SerializeField] private Color nameColor; // Цвет имени в панели диалогов.
-
-        public string Name => name;
-        public Color NameColor => nameColor;
+        public string name;
+        public Color nameColor; // Цвет имени в панели диалогов.
+        public Sprite avatar;
     }
 }

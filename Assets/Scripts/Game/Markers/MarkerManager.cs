@@ -32,6 +32,11 @@ namespace Game.Markers
             }
         }
 
+        public void SetMarkersActive(bool active)
+        {
+            markersAxis.gameObject.SetActive(active);
+        }
+
         public ActionMarker CreateActionMarker(Transform target, Sprite sprite, Action action, bool selfDestroy = true)
         {
             var marker = Instantiate(GetPrefabByType(EMarkerType.Action), markersAxis);
@@ -43,7 +48,13 @@ namespace Game.Markers
             component.onMarkerDisappear += action.Invoke;
             if (selfDestroy)
             {
-                component.onMarkerDisappear += () => _markers.Remove(component);
+                component.onMarkerDisappear += SelfDestroy;
+
+                void SelfDestroy()
+                {
+                    _markers.Remove(component);
+                    Destroy(component.gameObject);
+                }
             }
 
             _markers.Add(component);
@@ -64,7 +75,11 @@ namespace Game.Markers
 
         public void RemoveMarker(MarkerBase marker)
         {
-            Destroy(marker.gameObject);
+            if (marker != null)
+            {
+                Destroy(marker.gameObject);
+            }
+
             _markers.Remove(marker);
         }
 

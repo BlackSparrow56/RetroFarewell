@@ -13,4 +13,51 @@ MonoBehaviour:
   m_Name: PersonsDatabase
   m_EditorClassIdentifier: 
   persons:
-  - {fileID: 11400000, guid: b5edcdcd778fa00448308a6fd52f5576, type: 2}
+  - name: "\u0410\u043B\u0435\u043A\u0441\u0435\u0439"
+    nameColor: {r: 0.21960786, g: 0.37254903, b: 0.75294125, a: 1}
+    avatar: {fileID: 21300000, guid: 4a00bcda98384f14d97c2391db8974ee, type: 3}
+  - name: "\u0410\u0434\u0435\u043B\u0438\u043D\u0430"
+    nameColor: {r: 0.82745105, g: 0.4039216, b: 0.3529412, a: 1}
+    avatar: {fileID: 21300000, guid: e594b71283e3f7148bc862ce03904393, type: 3}
+  - name: "\u0414\u0430\u043D\u0438\u0438\u043B"
+    nameColor: {r: 0.37647063, g: 0.27450982, b: 0.36862746, a: 1}
+    avatar: {fileID: 21300000, guid: 131ccc31d8a7b1f4d9c1139b7fdb55e4, type: 3}
+  - name: "\u041C\u0430\u043A\u0441\u0438\u043C"
+    nameColor: {r: 0.45098042, g: 0.3803922, b: 0.3529412, a: 1}
+    avatar: {fileID: 21300000, guid: 1f06925e1dbaa2e4a9427b18bdc1cf4f, type: 3}
+  - name: "\u0411\u043E\u0433\u0434\u0430\u043D"
+    nameColor: {r: 0.03529412, g: 0.015686275, b: 0.22352943, a: 1}
+    avatar: {fileID: 21300000, guid: 155bfd11b74b07b41911db546e037f12, type: 3}
+  - name: ???
+    nameColor: {r: 0, g: 0, b: 0, a: 1}
+    avatar: {fileID: 0}
+  - name: "\u0417\u0430\u043A\u0430\u0434\u0440\u043E\u0432\u044B\u0439 \u0433\u043E\u043B\u043E\u0441"
+    nameColor: {r: 0.27058825, g: 0.6666667, b: 0.68235296, a: 1}
+    avatar: {fileID: 0}
+  - name: "\u041D\u0435\u0437\u043D\u0430\u043A\u043E\u043C\u0435\u0446"
+    nameColor: {r: 0.8000001, g: 0.8000001, b: 0.8000001, a: 1}
+    avatar: {fileID: 0}
+  - name: "\u0414\u044F\u0434\u044F \u0412\u0430\u043D\u044F"
+    nameColor: {r: 0.8000001, g: 0.8000001, b: 0.8000001, a: 1}
+    avatar: {fileID: 0}
+  - name: "\u0420\u043E\u043C\u0430\u043D"
+    nameColor: {r: 0.47058827, g: 0.4784314, b: 0.27058825, a: 1}
+    avatar: {fileID: 21300000, guid: 3fdf7133f14d1df4ca547448f8de9017, type: 3}
+  - name: "\u0421\u0430\u0448\u0430"
+    nameColor: {r: 0.19607845, g: 0.16862746, b: 0.1137255, a: 1}
+    avatar: {fileID: 21300000, guid: ae83eab6cb5951846a160f4406142363, type: 3}
+  - name: "\u041F\u0451\u0442\u0440"
+    nameColor: {r: 0.87843144, g: 0.40000004, b: 0.40000004, a: 1}
+    avatar: {fileID: 21300000, guid: 19197f88c638a4c4ebd2dda90b4e687a, type: 3}
+  - name: "\u0410\u0437\u0430\u043C\u0430\u0442"
+    nameColor: {r: 0.33333334, g: 0.29411766, b: 0.2392157, a: 1}
+    avatar: {fileID: 21300000, guid: fdec3e879369d8e45a0c2bce489c73e8, type: 3}
+  - name: "\u041E\u043B\u0435\u0433"
+    nameColor: {r: 0.49803922, g: 0.5411765, b: 0.2392157, a: 1}
+    avatar: {fileID: 21300000, guid: 18d65bc5e78a7e4449992ea321b96839, type: 3}
+  - name: "\u0414\u044F\u0434\u044F \u0412\u0430\u043D\u044F <b></b>"
+    nameColor: {r: 0.49803922, g: 0.5411765, b: 0.2392157, a: 1}
+    avatar: {fileID: 21300000, guid: 17296a825287436429c011bd2fa2317e, type: 3}
+  - name: "\u041D\u0435\u0437\u043D\u0430\u043A\u043E\u043C\u0435\u0446 2"
+    nameColor: {r: 0.8000001, g: 0.8000001, b: 0.8000001, a: 1}
+    avatar: {fileID: 0}

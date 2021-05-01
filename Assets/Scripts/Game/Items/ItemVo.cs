@@ -9,7 +9,7 @@ namespace Game.Items
         [SerializeField] private int id;
 
         [SerializeField] new private string name;
-        [SerializeField] private string description;
+        [SerializeField] [TextArea] private string description;
 
         [SerializeField] private Sprite icon;
 

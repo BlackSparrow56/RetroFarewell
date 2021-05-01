@@ -1,9 +1,6 @@
-using System;
-
 namespace Game.Dialogues.Nodes
 {
-    [Serializable]
-    public class Node
+    public abstract class Node
     {
         public string text;
 

@@ -18,7 +18,7 @@ namespace Game.UI
 
         public void Set(PlayerItem item, Color color)
         {
-            nameText.text = $"<b><color={color.ToHexadecimal()}>{item.type.Name}</color></b> - {item.count}";
+            nameText.text = $"<b><color={color.ToHexadecimal()}>{item.type.Name}</color></b> {(item.count != 1 ? $"- {item.count}" : "")}";
             iconImage.sprite = item.type.Icon;
             mark.SetActive(item.newItem);
         }

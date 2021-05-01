@@ -1,8 +1,11 @@
 using System;
 using UnityEngine;
+using Game.Player;
 using Game.UI.Panels.Dialogues;
 using Game.Dialogues.Nodes;
-using Game.Databases;
+using Game.Dialogues.Battles.Nodes;
+using Game.Events;
+using Game.Events.Instructions.Enums;
 using Game.Interactions;
 using Zenject;
 
@@ -11,27 +14,27 @@ namespace Game.Dialogues
     [AddComponentMenu("Game/Dialogues/DialogueStarter")]
     public class DialogueStarter : MonoBehaviour
     {
-        [SerializeField] private int dialogueId;
         [SerializeField] private Interactor interactor;
 
         [SerializeField] private KeyCode executeKeyCode;
 
-        [SerializeField] private DialoguesDatabase database;
+        [SerializeField] private Dialogue dialogue;
 
-        private Action execute = () => { };
-        private bool _waiting;
-
+        private Executor _executor;
         private DialogueUI _dialogueUI;
+        private PlayerController _playerController;
 
         [Inject]
-        private void Construct(DialogueUI dialogueUI)
+        private void Construct(Executor executor, DialogueUI dialogueUI, PlayerController playerController)
         {
+            _executor = executor;
             _dialogueUI = dialogueUI;
+            _playerController = playerController;
         }
 
-        private void StartDialogue()
+        public void StartDialogue()
         {
-            var dialogue = database.GetDialogueById(dialogueId);
+            var tempHearts = _playerController.Stats.CurrentHearts;
 
             _dialogueUI.Clear();
             _dialogueUI.Set(dialogue);
@@ -49,14 +52,55 @@ namespace Game.Dialogues
                     var replica = (Replica) node;
 
                     _dialogueUI.Say(replica);
-                    _dialogueUI.Say(replica.GetAnswers(dialogue));
-                    _dialogueUI.onAnswerChoosen += ExecuteAnswer;
+
+                    if (replica.answerNodes != null && replica.answerNodes.Count > 0)
+                    {
+                        var answers = replica.GetAnswers(dialogue);
+
+                        if (replica.IsAttackAnswers(dialogue))
+                        {       
+                            foreach (var answer in answers)
+                            {
+                                if (answer.GetType() == typeof(AttackAnswer))
+                                {
+                                    answer.onAnswerChoosen += Attack;
+                                }
+
+                                void Attack()
+                                {
+                                    var attackAnswer = (AttackAnswer) answer;
+
+                                    if (!attackAnswer.correct)
+                                    {
+                                        _playerController.Stats.Damage(out bool lose);
+                                        if (lose)
+                                        {
+                                            _dialogueUI.Clear();
+                                            node = dialogue.StartReplica;                                                                                           
+
+                                            _playerController.Stats.SetHearts(tempHearts);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        _dialogueUI.Say(answers);
+                        _dialogueUI.onAnswerChoosen += ExecuteAnswer;
+                    }
+                    else
+                    {
+                        Next(replica);
+                    }
 
                     void ExecuteAnswer(Answer answer)
                     {
                         _dialogueUI.onAnswerChoosen -= ExecuteAnswer;
+                        node = answer;
 
-                        Next(answer);
+                        answer.onAnswerChoosen.Invoke();
+
+                        Next(node);
                     }   
                 }
                 else
@@ -76,7 +120,7 @@ namespace Game.Dialogues
                 {
                     if (nextNode.exit)  
                     {
-                        Wait(_dialogueUI.Close);
+                        Wait(End);
                     }
                     else
                     {
@@ -87,35 +131,38 @@ namespace Game.Dialogues
 
                 void Wait(Action action)
                 {
-                    execute += StopWaiting;
+                    _executor.AddKeyInstruction(executeKeyCode, EKeyState.Pushed, StopWaiting, true);
 
                     _dialogueUI.SetWaiting(true);
 
                     void StopWaiting()
                     {
-                        execute -= StopWaiting;
+                        _dialogueUI.SetWaiting(false);
                         action.Invoke();
                     }
                 }
-            }
-        }
 
-        private void Update()
-        {
-            if (Input.GetKeyDown(executeKeyCode))
-            {
-                execute.Invoke();
+                void End()
+                {
+                    _dialogueUI.Close();
+                }
             }
         }
 
         private void OnEnable()
         {
-            interactor.Interaction += StartDialogue;
+            if (interactor != null)
+            {
+                interactor.Interaction += StartDialogue;
+            }
         }
 
         private void OnDisable()
         {
-            interactor.Interaction -= StartDialogue;
+            if (interactor != null)
+            {
+                interactor.Interaction -= StartDialogue;
+            }
         }
     }
 }

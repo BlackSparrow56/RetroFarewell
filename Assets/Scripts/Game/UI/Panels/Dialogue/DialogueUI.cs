@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using Game.UI.Links;
 using Game.UI.Panels.Dialogues.Structs;
 using Game.Dialogues;
@@ -21,6 +22,9 @@ namespace Game.UI.Panels.Dialogues
 
         [SerializeField] private Transform content;
 
+        [SerializeField] private Image avatar;
+        [SerializeField] private Sprite defaultAvatar;
+
         [SerializeField] private ShimmeryHint hint;
 
         [SerializeField] private DialogueStyle style;
@@ -36,6 +40,7 @@ namespace Game.UI.Panels.Dialogues
 
         private AnswerUI _currentAnswer;
 
+        private int _current = 0;
         private bool _choosing = false;
 
         private LinkEventsContainer _linksContainer;
@@ -61,6 +66,8 @@ namespace Game.UI.Panels.Dialogues
         {
             _dialogue.ForEach(value => Destroy(value));
             _dialogue.Clear();
+
+            _current = 0;
         }
 
         public void Say(Replica replica)
@@ -68,13 +75,22 @@ namespace Game.UI.Panels.Dialogues
             var replicaObject = Instantiate(replicaPrefab, content);
             var component = replicaObject.GetComponent<ReplicaUI>();
 
+            var person = personsDatabase.GetPersonByName(replica.name); 
+            var color = person != null ? person.nameColor : Color.white;
+
+            avatar.sprite = person.avatar != null ? person.avatar : defaultAvatar;
+
             component.SetText(replica.text);
-            component.SetName(replica.name, personsDatabase.GetPersonByName(replica.name).NameColor);
+            component.SetName(replica.name, color);
             component.SetContainer(_linksContainer);
+
+            component.LeftAlignment = _current % 2 == 0;
 
             component.Set();
 
             _dialogue.Add(replicaObject);
+
+            _current++;
         }
 
         public void Say(DialogueEvent action)

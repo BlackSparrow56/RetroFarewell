@@ -14,6 +14,11 @@ namespace Utils.Extensions
         {
             return $"<color={color.ToHexadecimal()}>{text}</color>";
         }
+
+        public static string Bold(this string text)
+        {
+            return $"<b>{text}</b>";
+        }
     }
 }
     

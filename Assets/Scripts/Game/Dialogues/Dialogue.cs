@@ -10,8 +10,8 @@ namespace Game.Dialogues
     [Serializable]
     public class Dialogue
     {
-        [SerializeField] private int id;
         [SerializeField] private string name;
+        [SerializeField] private int id;
 
         [SerializeField] private Replica startReplica;
 
@@ -36,6 +36,10 @@ namespace Game.Dialogues
             }
             if (target == null)
             {
+                target = Find(nodesContainer.replicas);
+            }
+            if (target == null)
+            {
                 target = Find(nodesContainer.actions);
             }
             if (target == null)
@@ -44,7 +48,7 @@ namespace Game.Dialogues
             }
             if (target == null)
             {
-                target = Find(nodesContainer.replicas);
+                target = Find(nodesContainer.attackAnswers);
             }
 
             return target;

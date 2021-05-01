@@ -17,7 +17,7 @@ namespace Utils.Extensions
 
             return code;
 
-            int ToInt(float from)
+            static int ToInt(float from)
             {
                 return (int) (from * 255);
             }

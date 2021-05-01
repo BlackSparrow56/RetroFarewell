@@ -2,12 +2,13 @@
 using UnityEngine;
 using UnityEngine.Events;
 using Game.Events;
+using Game.Events.Instructions;
 using Game.Events.Instructions.Enums;
 using Zenject;
 
 namespace Game.Interactions
 {
-    [RequireComponent(typeof(Collider))]
+    [RequireComponent(typeof(Collider2D))]
     [AddComponentMenu("Game/Interactions/Trigger")]
     public class Trigger : Interactor
     {
@@ -29,12 +30,23 @@ namespace Game.Interactions
             set => _interaction = value;
         }
 
+        private KeyInstruction _keyInstruction;
+
         private Executor _executor;
 
         [Inject]
         private void Construct(Executor executor)
         {
             _executor = executor;
+        }
+
+        private void Action()
+        {
+            Interaction.Invoke();
+            if (actionSelfDestroy)
+            {
+                onTriggerExit.Invoke();
+            }
         }
         
         private bool Condition(Collider2D other)
@@ -54,11 +66,11 @@ namespace Game.Interactions
             {
                 if (buttonPerform)
                 {
-                    _executor.AddKeyInstruction(keyCode, EKeyState.Pushed, Interaction.Invoke, actionSelfDestroy);
+                    _keyInstruction = _executor.AddKeyInstruction(keyCode, EKeyState.Pushed, Action, actionSelfDestroy);
                 }
                 else
                 {
-                    Interaction.Invoke();
+                    Action();
                 }
 
                 onTriggerEnter.Invoke();
@@ -71,7 +83,8 @@ namespace Game.Interactions
             {
                 if (buttonPerform)
                 {
-                    _executor.RemoveKeyInstruction(keyCode, EKeyState.Pushed);
+                    _executor.RemoveKeyInstruction(_keyInstruction);
+                    _keyInstruction = null;
                 }
 
                 onTriggerExit.Invoke();

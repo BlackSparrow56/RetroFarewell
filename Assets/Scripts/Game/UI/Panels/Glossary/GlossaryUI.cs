@@ -2,6 +2,7 @@ using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 using Game.Lore.Notes;
+using Utils.Extensions;
 using TMPro;
 
 namespace Game.UI.Panels.Glossary
@@ -57,10 +58,10 @@ namespace Game.UI.Panels.Glossary
                         var noteObject = Instantiate(notePrefab, notesContent);
                         var component = noteObject.GetComponent<NoteUI>();
 
-                        string text = "";
+                        string text = $"<b>{note.name}</b>\n\n";
                         foreach (var paragraph in note.paragraphs)
                         {
-                            text += paragraph.ToString() + "\n";
+                            text += paragraph.ToString() + "\n\n";
                         }
 
                         component.Set(text);

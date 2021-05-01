@@ -20,6 +20,9 @@ namespace Game.UI
 
         public void SetActive(bool active)
         {
+            if (isActive == active)
+                return;
+
             isActive = active;
             if (!active)
             {
@@ -38,7 +41,15 @@ namespace Game.UI
 
         private void Start()
         {
-            SetActive(isActive);
+            isActive = isActive;
+            if (!isActive)
+            {
+                text.alpha = 0f;
+            }
+            else
+            {
+                _startTime = Time.time;
+            }
         }
 
         private void Update()

@@ -13,26 +13,45 @@ namespace Game.Map
 
         [SerializeField] private SpriteRenderer spriteRenderer;
 
-        private void OnTriggerEnter2D(Collider2D collision)
+        private bool _isVanished;
+
+        private void OnTriggerStay2D(Collider2D collision)
         {
-            if (collision.transform.position.y > transform.position.y)
+            if (!_isVanished)
             {
-                var controller = collision.gameObject.GetComponent<InteractController>();
-                if (controller != null && controller.Name == "PlayerRenderer")
+                if (collision.transform.position.y > transform.position.y)
                 {
-                    Disappear();
+                    var controller = collision.gameObject.GetComponent<InteractController>();
+                    if (controller != null && controller.Name == "PlayerRenderer")
+                    {
+                        Disappear();
+                        _isVanished = true;
+                    }
+                }
+            }
+            else
+            {
+                if (collision.transform.position.y <= transform.position.y)
+                {
+                    var controller = collision.gameObject.GetComponent<InteractController>();
+                    if (controller != null && controller.Name == "PlayerRenderer")
+                    {
+                        Appear();
+                        _isVanished = false;
+                    }
                 }
             }
         }
 
         private void OnTriggerExit2D(Collider2D collision)
         {
-            if (collision.transform.position.y > transform.position.y)
+            if (_isVanished)
             {
                 var controller = collision.gameObject.GetComponent<InteractController>();
                 if (controller != null && controller.Name == "PlayerRenderer")
                 {
                     Appear();
+                    _isVanished = false;
                 }
             }
         }
